@@ -11,12 +11,16 @@ void initWIFI(){
     Serial.print("Connected to WIFI");
 }
 
-bool refreshWIFI(){
-    WiFi.begin(SSID, PASSWORD);
-    if (WiFi.status() == WL_CONNECTED){
-        Serial.print("Connected to WIFI");
+bool isWIFI(){
+    if(WiFi.status() != WL_CONNECTED){
+        WiFi.begin(SSID, PASSWORD);
+        if (WiFi.status() == WL_CONNECTED){
+            Serial.print("Connected to WIFI");
+            return true;
+        }
+        Serial.println("WIFI disconnected");
+        return false;
+    }else{
         return true;
     }
-    Serial.println("WIFI disconnected");
-    return false;
 }

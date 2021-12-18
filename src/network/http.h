@@ -1,6 +1,6 @@
 #ifndef HTTP_H
 #define HTTP_H
 
-bool postData(char *capxmlstringg);
+bool postData(String CAP_XML);
 
 #endif

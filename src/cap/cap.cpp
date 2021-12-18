@@ -29,9 +29,24 @@ const char* CAP_TEMP =
     "</info>"
 "</alert>";
 
-void generateCAP(char* buffer,String randID,String datetime, double temp_mean,double temp_std,double humidity_mean,double humidity_std,
-double pressure_mean,double pressure_std,double light_mean,double light_std){
-        sprintf(buffer,CAP_TEMP,randID,datetime, 
+String gen_random_id() {
+    static const char alphanum[] =
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz";
+    String tmp_s;
+    tmp_s.reserve(32);
+
+    for (int i = 0; i < 32; ++i) {
+        tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
+    }
+    
+    return tmp_s;
+}
+
+void generateCAP(char* buffer,String datetime, float temp_mean,float temp_std,float humidity_mean,float humidity_std,
+float pressure_mean,float pressure_std,float light_mean,float light_std){
+        sprintf(buffer,CAP_TEMP,gen_random_id(),datetime, 
         String(temp_mean).c_str(), String(temp_std).c_str(), 
         String(humidity_mean).c_str(), String(humidity_std).c_str(), 
         String(pressure_mean).c_str(), String(pressure_std).c_str(), 

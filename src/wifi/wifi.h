@@ -2,6 +2,6 @@
 #define WIFI_H
 
 void initWIFI();
-bool refreshWIFI();
+bool isWIFI();
 
 #endif

@@ -2,10 +2,11 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include "./wifi/config.h"
+#include "./wifi/wifi.h"
 
-bool postData(char *CAP_XML_STR){
+bool postData(String CAP_XML_STR){
     HTTPClient http;
-    if (WiFi.status() != WL_CONNECTED){return false;}
+    if (!isWIFI()){return false;}
     String DEST_URL = (String)SERVER + "/update";
     http.begin(DEST_URL);
 

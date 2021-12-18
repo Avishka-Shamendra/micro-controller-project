@@ -1,17 +1,17 @@
 #include <Arduino.h>
 
-double mean(double arr[], int length)
+float mean(float arr[], int length)
 {
-    double total = 0;
+    float total = 0;
     for (int i = 0; i < length; i++){
         total += arr[i];
     }
     return round((total / length));
 }
 
-double stdDev(double arr[], int length, double mean)
+float stdDev(float arr[], int length, float mean)
 {
-    double var = 0;
+    float var = 0;
     for (int i = 0; i < length; i++){
         var += pow((arr[i] - mean), 2);
     }

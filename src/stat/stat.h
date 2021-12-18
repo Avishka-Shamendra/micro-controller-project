@@ -1,7 +1,7 @@
 #ifndef STAT_H
 #define STAT_H
 
-double mean(double arr[], int len);
-double stdDev(double arr[], int len, double mean);
+float mean(float arr[], int len);
+float stdDev(float arr[], int len, float mean);
 
 #endif
