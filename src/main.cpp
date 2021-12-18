@@ -21,6 +21,7 @@ const float SAMPLE_PERIOD = SERVER_UPDATE_FREQUENCY / MAX_SAMPLES;
 long lastSampleTimeMillis;
 char cap_string[3000];
 int currentSampleNumber = 0;
+char timestamp[32] = {};
 
 queue<String> capQueue;
 float temperatureSamples[MAX_SAMPLES];
@@ -40,6 +41,21 @@ void clearSamples() {
   clearBuffer(humiditySamples);
   clearBuffer(pressureSamples);
   clearBuffer(lightSamples);
+}
+
+void getTimestamp(char *timestamp){
+  struct tm details;
+  if (getLocalTime(&details))
+  {
+    char string[32];
+    time_t t = time(NULL);
+    strftime(string, sizeof(string), "%Y-%m-%dT%H:%M:%S%z", localtime(&t));
+    sprintf(timestamp, string);
+    
+  }
+  else{
+    Serial.println("Error while getting the time");
+  }
 }
 
 void setup() {
@@ -72,7 +88,8 @@ void loop() {
       float light_mean = mean(lightSamples, MAX_SAMPLES);
       float light_std_dev = stdDev(lightSamples, MAX_SAMPLES, light_mean);
 
-      generateCAP(cap_string,"datetime",temp_mean,temp_std_dev,humidity_mean,humidity_std_dev,
+      getTimestamp(timestamp);
+      generateCAP(cap_string,String(timestamp),temp_mean,temp_std_dev,humidity_mean,humidity_std_dev,
       pressure_mean,pressure_std_dev,light_mean,light_std_dev);
 
       bool isSent = postData(cap_string);
