@@ -4,6 +4,7 @@
 #include "./wifi/config.h"
 #include "./wifi/wifi.h"
 
+/*method to post the CAP XML string to the remote server*/
 bool postData(String CAP_XML_STR){
     HTTPClient http;
     if (!isWIFI()){return false;}

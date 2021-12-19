@@ -14,28 +14,32 @@
 #include "./stat/stat.h";
 using namespace std;
 
-#define SERVER_UPDATE_FREQUENCY 15*60*1000
+#define SERVER_UPDATE_FREQUENCY 15*60*1000 //15 minutes in millisec
 #define MAX_SAMPLES 15
 
-const float SAMPLE_PERIOD = SERVER_UPDATE_FREQUENCY / MAX_SAMPLES;
+const float SAMPLE_PERIOD = SERVER_UPDATE_FREQUENCY / MAX_SAMPLES; // gap between to readings
 long lastSampleTimeMillis;
-char cap_string[3000];
+char cap_string[3000]; // to store CAP string
 int currentSampleNumber = 0;
 char timestamp[32] = {};
 
-queue<String> capQueue;
+queue<String> capQueue; // to store failed CAP recors to send
+
+//sample buffer to hold sample readings
 float temperatureSamples[MAX_SAMPLES];
 float humiditySamples[MAX_SAMPLES];
 float pressureSamples[MAX_SAMPLES];
 float lightSamples[MAX_SAMPLES];
 
 
+//clearing a buffer
 void clearBuffer(float* buffer) {
   for (int i = 0; i < MAX_SAMPLES; i++) {
     buffer[i] = NULL;
   }
 }
 
+// clearing sample arrays
 void clearSamples() {
   clearBuffer(temperatureSamples);
   clearBuffer(humiditySamples);
@@ -58,6 +62,7 @@ void getTimestamp(char *timestamp){
   }
 }
 
+//setting up wifi and sensor modules
 void setup() {
   Serial.begin(115200);
   initWIFI();
@@ -67,6 +72,7 @@ void setup() {
 }
 void loop() {
 
+    //if there are failed record send, send then now 
   while(!capQueue.empty()) {
       String cap_front = capQueue.front();
       bool isSent = postData(cap_front);
@@ -75,10 +81,13 @@ void loop() {
           break;
       }
   }
+  //sample only if the gap is more than the sample period otherwise do nothing
   if(SAMPLE_PERIOD>millis()-lastSampleTimeMillis){return;}
 
+  //if arrays full create CAP record and try to send it to server
   if(currentSampleNumber==MAX_SAMPLES){
       Serial.println("Updating server.....");
+      //calculate means and std_devs
       float temp_mean = mean(temperatureSamples, MAX_SAMPLES);
       float temp_std_dev = stdDev(temperatureSamples, MAX_SAMPLES, temp_mean);
       float humidity_mean = mean(humiditySamples, MAX_SAMPLES);
@@ -92,6 +101,7 @@ void loop() {
       generateCAP(cap_string,String(timestamp),temp_mean,temp_std_dev,humidity_mean,humidity_std_dev,
       pressure_mean,pressure_std_dev,light_mean,light_std_dev);
 
+      //try to send generated CAP
       bool isSent = postData(cap_string);
       if(isSent){Serial.println("Senor data uploded successfully");}
       else{
@@ -101,6 +111,7 @@ void loop() {
       clearSamples();
   }
 
+  // create a sample reading by reading all sensors
   lastSampleTimeMillis=millis();
   Serial.println("Reading sensors...");
   float temperature = readDHTTemperature();

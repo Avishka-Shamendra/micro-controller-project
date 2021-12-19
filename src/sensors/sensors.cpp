@@ -5,12 +5,14 @@
 
 Adafruit_BMP085 bmp;
 
+/*initilaizing bmp sensor*/
 void initiPressureSensor() {
   if (!bmp.begin()) {
     Serial.println("Failed to find BMP sensor");
   }
 }
 
+/*reading the BMP sensor*/
 float readPressureSensor() {
   if (!bmp.begin()) {
     Serial.println("Failed to read BMP sensor.");
@@ -31,7 +33,7 @@ float readPressureSensor() {
 #define DHTTYPE DHT11
 
 DHT dht(DHTPIN, DHTTYPE);
-
+/*reading and setinng up DHT sensor*/
 void initDHTSensor(){ 
     dht.begin();
 }
@@ -60,8 +62,8 @@ float readDHTTemperature() {
 
 /*----------------------------------------------------------------------------------------*/
 
-#define LDRPIN 5
-
+#define LDRPIN 15
+/* analog reading LDR as resistance proportional to light intensity*/
 float readLDR(){ 
     return analogRead(LDRPIN); 
 }

@@ -1,5 +1,5 @@
 #include <Arduino.h>
-
+/*methods to calculate mean and standard deviation of samples*/
 float mean(float arr[], int length)
 {
     float total = 0;

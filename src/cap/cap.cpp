@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <string>  
 
-
+/* CAP XML template to embed data into*/
 const char* CAP_TEMP = 
 "<?xml version = \"1.0\" encoding = \"utf8\"?>"
 "<alert xmlns = \"urn:oasis:names:tc:emergency:cap:1.2\">"
@@ -29,6 +29,7 @@ const char* CAP_TEMP =
     "</info>"
 "</alert>";
 
+/*to generate a random id to be used with the CAP record */
 String gen_random_id() {
     static const char alphanum[] =
         "0123456789"
@@ -44,6 +45,7 @@ String gen_random_id() {
     return tmp_s;
 }
 
+/* to generate CAP XML string using the sensor readings*/
 void generateCAP(char* buffer,String datetime, float temp_mean,float temp_std,float humidity_mean,float humidity_std,
 float pressure_mean,float pressure_std,float light_mean,float light_std){
         sprintf(buffer,CAP_TEMP,gen_random_id(),datetime, 

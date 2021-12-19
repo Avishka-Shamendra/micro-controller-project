@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include "config.h"
 
+/*initilize wifi connection*/
 void initWIFI(){
     WiFi.begin(SSID, PASSWORD);
     while (WiFi.status() != WL_CONNECTED){
@@ -11,6 +12,7 @@ void initWIFI(){
     Serial.print("Connected to WIFI");
 }
 
+/* auto connect if wifi disconnect*/
 bool isWIFI(){
     if(WiFi.status() != WL_CONNECTED){
         WiFi.begin(SSID, PASSWORD);
